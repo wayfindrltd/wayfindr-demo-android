@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId 'net.wayfindr.demo'
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName '0.1'
