@@ -89,6 +89,7 @@ public class BeaconController {
         for (BCBeacon bcBeacon : orderedBeacons) {
             if (bcBeacon.getProximity() == BCBeacon.BCProximity.BC_PROXIMITY_UNKNOWN) continue;
             if (bcBeacon.getAccuracy() < 0.0) continue;
+            if (bcBeacon.getMajor() == null || bcBeacon.getMinor() == null) continue;
             beacons.add(new Beacon(bcBeacon.getSerialNumber(), bcBeacon.getMajor(), bcBeacon.getMinor()));
         }
 
