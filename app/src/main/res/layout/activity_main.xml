@@ -14,4 +14,9 @@
         android:id="@+id/beacons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/speakFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speak friend"/>
 </LinearLayout>
