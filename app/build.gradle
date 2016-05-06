@@ -19,8 +19,12 @@ android {
     }
 }
 
+buildscript {
+    ext.support_version = '23.3.0'
+}
+
 dependencies {
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile "com.android.support:appcompat-v7:$support_version"
     compile 'com.bluecats:bluecats-android-sdk:1.13.8'
+    testCompile 'junit:junit:4.12'
 }

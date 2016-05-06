@@ -1,6 +1,7 @@
 package net.wayfindr.demo.controller;
 
 import android.app.Application;
+import android.os.Handler;
 import android.util.Log;
 
 import com.bluecats.sdk.BCBeacon;
@@ -21,7 +22,6 @@ import java.util.Objects;
 
 public class BeaconController {
     public static final String TAG = BeaconController.class.getSimpleName();
-    private List<Beacon> beacons;
 
     public static void onAppCreate(Application app) {
         BlueCatsSDK.startPurringWithAppToken(app, app.getString(R.string.bluecats_app_token));
@@ -35,10 +35,16 @@ public class BeaconController {
         BlueCatsSDK.didEnterBackground();
     }
 
-    private BCSite currentSite;
-    private boolean running;
+    private final Handler handler = new Handler();
+    private final Callback callback;
     private final BCMicroLocationManager microLocationManager = BCMicroLocationManager.getInstance();
     private MicroLocationManagerCallback microLocationManagerCallback = new MicroLocationManagerCallback();
+    private boolean running;
+    private BCSite currentSite;
+
+    public BeaconController(Callback callback) {
+        this.callback = callback;
+    }
 
     public void start() {
         running = true;
@@ -90,11 +96,14 @@ public class BeaconController {
     }
 
     public void setBeacons(List<Beacon> beacons) {
-        this.beacons = beacons;
-
         for (Beacon beacon : beacons) {
             Log.d(TAG, beacon.toString());
         }
+        callback.onBeaconsChanged(beacons);
+    }
+
+    public interface Callback {
+        void onBeaconsChanged(List<Beacon> beacons);
     }
 
     private class MicroLocationManagerCallback implements BCMicroLocationManagerCallback {
@@ -116,12 +125,17 @@ public class BeaconController {
         }
 
         @Override
-        public void onDidRangeBeaconsForSiteID(BCSite bcSite, List<BCBeacon> list) {
+        public void onDidRangeBeaconsForSiteID(BCSite bcSite, final List<BCBeacon> list) {
             Log.d(TAG, "onDidRangeBeaconsForSiteID()");
             for (BCBeacon bcBeacon : list) {
                 Log.d(TAG, "" + bcBeacon.getSerialNumber() + " " + bcBeacon.getProximity().getDisplayName(false));
             }
-            onBeaconRanged(list);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    onBeaconRanged(list);
+                }
+            });
         }
 
         @Override
