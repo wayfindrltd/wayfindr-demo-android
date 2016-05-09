@@ -32,10 +32,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.speakFriend).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.speakGeneral).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textToSpeechController.speak("Hello");
+                textToSpeechController.speak(TextToSpeechController.Earcon.GENERAL, "Hello");
+            }
+        });
+
+        findViewById(R.id.speakJourneyComplete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textToSpeechController.speak(TextToSpeechController.Earcon.JOURNEY_COMPLETE, "Hello");
             }
         });
     }

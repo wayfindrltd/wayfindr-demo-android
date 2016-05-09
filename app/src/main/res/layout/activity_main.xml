@@ -15,8 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
-        android:id="@+id/speakFriend"
+        android:id="@+id/speakGeneral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Speak friend"/>
+        android:text="Speak general: Hello"/>
+    <Button
+        android:id="@+id/speakJourneyComplete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speak journey complete: Hello"/>
 </LinearLayout>
