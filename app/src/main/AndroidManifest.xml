@@ -23,9 +23,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name="com.bluecats.sdk.BlueCatsSDKService" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="@string/google_play_services_api_key" />
     </application>
 </manifest>

@@ -20,11 +20,13 @@ android {
 }
 
 buildscript {
+    ext.play_services_version = '8.4.0'
     ext.support_version = '23.3.0'
 }
 
 dependencies {
     compile "com.android.support:appcompat-v7:$support_version"
+    compile "com.google.android.gms:play-services-nearby:$play_services_version"
     compile 'com.bluecats:bluecats-android-sdk:1.13.8'
     testCompile 'junit:junit:4.12'
 }
