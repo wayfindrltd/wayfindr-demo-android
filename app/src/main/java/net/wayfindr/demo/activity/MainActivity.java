@@ -7,16 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.wayfindr.demo.R;
-import net.wayfindr.demo.controller.BeaconController;
 import net.wayfindr.demo.controller.NearbyMessagesController;
 import net.wayfindr.demo.controller.TextToSpeechController;
-import net.wayfindr.demo.model.Beacon;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION = 0;
-    private BeaconController beaconController;
     private TextToSpeechController textToSpeechController;
     private TextView beaconsTextView;
     private NearbyMessagesController nearbyMessagesController;
@@ -29,19 +24,6 @@ public class MainActivity extends AppCompatActivity {
         textToSpeechController = new TextToSpeechController(this);
 
         beaconsTextView = (TextView) findViewById(R.id.beacons);
-
-        beaconController = new BeaconController(new BeaconController.Callback() {
-            @Override
-            public void onBeaconsChanged(List<Beacon> beacons) {
-                String text = "";
-                for (Beacon beacon : beacons) {
-                    if (!text.isEmpty()) text += ", ";
-                    text += beacon;
-                }
-//                beaconsTextView.setText(text);
-            }
-        });
-//        beaconController.start();
 
         nearbyMessagesController = new NearbyMessagesController(this, REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION, savedInstanceState, new NearbyMessagesController.Callback() {
             @Override
@@ -59,12 +41,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        beaconController.stop();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         nearbyMessagesController.onStart();
@@ -74,21 +50,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         nearbyMessagesController.onStop();
         super.onStop();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        BeaconController.onActivityResume();
-
-        // TODO request location permission
-        //TODO check for bluetooth and internet connection
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        BeaconController.onActivityPause();
     }
 
     @Override
