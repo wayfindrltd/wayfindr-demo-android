@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 messageTextView.setText(text);
             }
         });
-        directionsController = new DirectionsController(textToSpeechController, new DirectionsController.Callback() {
+        directionsController = new DirectionsController(textToSpeechController, savedInstanceState, new DirectionsController.Callback() {
             @Override
             public void onWaitingForIdChanged(String id) {
                 waitingForIdTextView.setText(id == null ? "" : id);
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         messageTextView = (TextView) findViewById(R.id.message);
         waitingForIdTextView = (TextView) findViewById(R.id.waitingForId);
+        waitingForIdTextView.setText(directionsController.getWaitingForId());
 
         findViewById(R.id.speakGeneral).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         nearbyMessagesController.onSaveInstanceState(state);
+        directionsController.onSaveInstanceState(state);
     }
 
     @Override
