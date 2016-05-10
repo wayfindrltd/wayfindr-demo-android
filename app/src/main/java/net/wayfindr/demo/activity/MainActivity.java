@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.wayfindr.demo.R;
+import net.wayfindr.demo.controller.DirectionsController;
 import net.wayfindr.demo.controller.NearbyMessagesController;
 import net.wayfindr.demo.controller.TextToSpeechController;
 import net.wayfindr.demo.model.DirectionMessage;
@@ -15,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION = 0;
     private TextToSpeechController textToSpeechController;
     private NearbyMessagesController nearbyMessagesController;
+    private DirectionsController directionsController;
     private TextView messageTextView;
     private TextView waitingForIdTextView;
-    private String waitingForId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +26,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textToSpeechController = new TextToSpeechController(this);
+        directionsController = new DirectionsController(textToSpeechController, new DirectionsController.Callback() {
+            @Override
+            public void onWaitingForIdChanged(String id) {
+                waitingForIdTextView.setText(id == null ? "" : id);
+            }
+
+            @Override
+            public void onMessageChanged(String message) {
+                messageTextView.setText(message);
+            }
+        });
 
         nearbyMessagesController = new NearbyMessagesController(this, REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION, savedInstanceState, new NearbyMessagesController.Callback() {
             @Override
             public void onNearbyMessage(DirectionMessage message) {
-                onMessage(message);
+                directionsController.considerMessage(message);
             }
         });
 
@@ -42,39 +54,30 @@ public class MainActivity extends AppCompatActivity {
                 textToSpeechController.speak(TextToSpeechController.Earcon.GENERAL, "A general message");
             }
         });
-
         findViewById(R.id.speakJourneyComplete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textToSpeechController.speak(TextToSpeechController.Earcon.JOURNEY_COMPLETE, "Journey is complete");
             }
         });
-
         findViewById(R.id.visitMessage1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onMessage(new DirectionMessage("1", DirectionMessage.Type.START, "Welcome to 1. Proceed to 2", "2"));
+                directionsController.considerMessage(new DirectionMessage("1", DirectionMessage.Type.START, "Welcome to 1. Proceed to 2", "2"));
             }
         });
         findViewById(R.id.visitMessage2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onMessage(new DirectionMessage("2", DirectionMessage.Type.NODE, "Proceed to 3", "3"));
+                directionsController.considerMessage(new DirectionMessage("2", DirectionMessage.Type.NODE, "Proceed to 3", "3"));
             }
         });
         findViewById(R.id.visitMessage3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onMessage(new DirectionMessage("3", DirectionMessage.Type.FINISH, "You made it", null));
+                directionsController.considerMessage(new DirectionMessage("3", DirectionMessage.Type.FINISH, "You made it", null));
             }
         });
-    }
-
-    private void onMessage(DirectionMessage message) {
-        messageTextView.setText(message.message);
-        waitingForId = message.nextId;
-        waitingForIdTextView.setText(waitingForId == null ? "" : waitingForId);
-        textToSpeechController.speak(message.type == DirectionMessage.Type.FINISH ? TextToSpeechController.Earcon.JOURNEY_COMPLETE : TextToSpeechController.Earcon.GENERAL, message.message);
     }
 
     @Override
@@ -92,14 +95,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
-
         nearbyMessagesController.onSaveInstanceState(state);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION) {
             nearbyMessagesController.onActivityResult(requestCode, resultCode, data);
         }
