@@ -18,6 +18,8 @@ import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 
+import net.wayfindr.demo.model.DirectionMessage;
+
 public class NearbyMessagesController {
     private final static String TAG = NearbyMessagesController.class.getSimpleName();
     private static final String NAMESPACE = "wayfindr-1303";
@@ -104,13 +106,13 @@ public class NearbyMessagesController {
         Log.i(TAG, "Got nearby message: " + message.getNamespace() + "/" + message.getType() + ": " + message.getContent().length + " bytes");
         if (message.getNamespace().equals(NAMESPACE)) {
             if (message.getType().equals(TYPE)) {
-                callback.onNearbyMessage(new String(message.getContent()));
+                callback.onNearbyMessage(new DirectionMessage("1", DirectionMessage.Type.START, new String(message.getContent()), null));
             }
         }
     }
 
     public interface Callback {
-        void onNearbyMessage(String message);
+        void onNearbyMessage(DirectionMessage message);
     }
 
     private class GoogleApiCallbacks implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {

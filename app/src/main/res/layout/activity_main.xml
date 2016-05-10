@@ -6,22 +6,54 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Beacons:"/>
+        android:text="Current message:" />
+
     <TextView
-        android:id="@+id/beacons"
+        android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Waiting for id:" />
+
+    <TextView
+        android:id="@+id/waitingForId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/speakGeneral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Speak general: Hello"/>
+        android:text="Speak general" />
+
     <Button
         android:id="@+id/speakJourneyComplete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Speak journey complete: Hello"/>
+        android:text="Speak journey complete" />
+
+    <Button
+        android:id="@+id/visitMessage1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Visit message 1" />
+
+    <Button
+        android:id="@+id/visitMessage2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Visit message 2" />
+
+    <Button
+        android:id="@+id/visitMessage3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Visit message 3" />
 </LinearLayout>
