@@ -25,14 +25,10 @@ public class DirectionsController {
 
         textToSpeechController.speak(message.type == DirectionMessage.Type.FINISH ? TextToSpeechController.Earcon.JOURNEY_COMPLETE : TextToSpeechController.Earcon.GENERAL, message.message);
         waitingForId = message.nextId;
-
-        callback.onMessageChanged(message.message);
         callback.onWaitingForIdChanged(message.nextId);
     }
 
     public interface Callback {
         void onWaitingForIdChanged(String id);
-
-        void onMessageChanged(String message);
     }
 }

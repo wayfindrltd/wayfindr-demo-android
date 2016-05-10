@@ -25,16 +25,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textToSpeechController = new TextToSpeechController(this);
+        textToSpeechController = new TextToSpeechController(this, new TextToSpeechController.Callback() {
+            @Override
+            public void onTextChanged(String text) {
+                messageTextView.setText(text);
+            }
+        });
         directionsController = new DirectionsController(textToSpeechController, new DirectionsController.Callback() {
             @Override
             public void onWaitingForIdChanged(String id) {
                 waitingForIdTextView.setText(id == null ? "" : id);
-            }
-
-            @Override
-            public void onMessageChanged(String message) {
-                messageTextView.setText(message);
             }
         });
 
@@ -78,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
                 directionsController.considerMessage(new DirectionMessage("3", DirectionMessage.Type.FINISH, "You made it", null));
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        textToSpeechController.onDestroy();
     }
 
     @Override
