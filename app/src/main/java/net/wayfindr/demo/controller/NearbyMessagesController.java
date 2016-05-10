@@ -23,7 +23,7 @@ import net.wayfindr.demo.model.DirectionMessage;
 public class NearbyMessagesController {
     private final static String TAG = NearbyMessagesController.class.getSimpleName();
     private static final String NAMESPACE = "wayfindr-1303";
-    private static final String TYPE = "test";
+    private static final String TYPE = "direction";
     private static final String INSTANCE_STATE_RESOLVING_ERROR = TAG + ".resolvingError";
     private final Activity activity;
     private final int requestNearbyMessagesResolution;
@@ -106,7 +106,7 @@ public class NearbyMessagesController {
         Log.i(TAG, "Got nearby message: " + message.getNamespace() + "/" + message.getType() + ": " + message.getContent().length + " bytes");
         if (message.getNamespace().equals(NAMESPACE)) {
             if (message.getType().equals(TYPE)) {
-                callback.onNearbyMessage(new DirectionMessage("1", DirectionMessage.Type.START, new String(message.getContent()), null));
+                callback.onNearbyMessage(DirectionMessage.fromJson(new String(message.getContent())));
             }
         }
     }
