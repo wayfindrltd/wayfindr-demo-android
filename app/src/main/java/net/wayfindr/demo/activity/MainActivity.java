@@ -11,6 +11,7 @@ import net.wayfindr.demo.controller.DirectionsController;
 import net.wayfindr.demo.controller.NearbyMessagesController;
 import net.wayfindr.demo.controller.TextToSpeechController;
 import net.wayfindr.demo.model.DirectionMessage;
+import net.wayfindr.demo.model.Message;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION = 0;
@@ -40,8 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
         nearbyMessagesController = new NearbyMessagesController(this, REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION, savedInstanceState, new NearbyMessagesController.Callback() {
             @Override
-            public void onNearbyMessage(DirectionMessage message) {
+            public void onNearbyMessageFound(Message message) {
                 directionsController.considerMessage(message);
+            }
+
+            @Override
+            public void onNearbyMessageLost(Message message) {
             }
         });
 

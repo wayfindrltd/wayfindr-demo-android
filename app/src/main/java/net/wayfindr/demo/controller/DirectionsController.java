@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import net.wayfindr.demo.model.DirectionMessage;
+import net.wayfindr.demo.model.Message;
 
 public class DirectionsController {
     private static final String TAG = DirectionsController.class.getSimpleName();
@@ -22,20 +23,23 @@ public class DirectionsController {
         state.putString(INSTANCE_STATE_WAITING_FOR_ID, waitingForId);
     }
 
-    public void considerMessage(DirectionMessage message) {
-        if (waitingForId == null || waitingForId.isEmpty()) {
-            if (message.type != DirectionMessage.Type.START) {
-                return;
+    public void considerMessage(Message message) {
+        if (message instanceof DirectionMessage) {
+            DirectionMessage directionMessage = (DirectionMessage) message;
+            if (waitingForId == null || waitingForId.isEmpty()) {
+                if (directionMessage.type != DirectionMessage.Type.START) {
+                    return;
+                }
+            } else {
+                if (!waitingForId.equals(directionMessage.id)) {
+                    return;
+                }
             }
-        } else {
-            if (!waitingForId.equals(message.id)) {
-                return;
-            }
-        }
 
-        textToSpeechController.speak(message.type == DirectionMessage.Type.FINISH ? TextToSpeechController.Earcon.JOURNEY_COMPLETE : TextToSpeechController.Earcon.GENERAL, message.message);
-        waitingForId = message.nextId;
-        callback.onWaitingForIdChanged(message.nextId);
+            textToSpeechController.speak(directionMessage.type == DirectionMessage.Type.FINISH ? TextToSpeechController.Earcon.JOURNEY_COMPLETE : TextToSpeechController.Earcon.GENERAL, directionMessage.message);
+            waitingForId = directionMessage.nextId;
+            callback.onWaitingForIdChanged(directionMessage.nextId);
+        }
     }
 
     public String getWaitingForId() {

@@ -13,12 +13,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 
 import net.wayfindr.demo.model.DirectionMessage;
+import net.wayfindr.demo.model.Message;
+import net.wayfindr.demo.model.UnknownMessage;
+
+import java.util.Arrays;
 
 public class NearbyMessagesController {
     private final static String TAG = NearbyMessagesController.class.getSimpleName();
@@ -60,8 +63,13 @@ public class NearbyMessagesController {
 
         Nearby.Messages.subscribe(googleApiClient, new MessageListener() {
             @Override
-            public void onFound(Message message) {
-                onMessage(message);
+            public void onFound(com.google.android.gms.nearby.messages.Message message) {
+                onMessageFound(parseMessage(message));
+            }
+
+            @Override
+            public void onLost(com.google.android.gms.nearby.messages.Message message) {
+                onMessageLost(parseMessage(message));
             }
         }, options)
                 .setResultCallback(new ResultCallback<Status>() {
@@ -102,17 +110,34 @@ public class NearbyMessagesController {
         }
     }
 
-    private void onMessage(Message message) {
-        Log.i(TAG, "Got nearby message: " + message.getNamespace() + "/" + message.getType() + ": " + message.getContent().length + " bytes");
-        if (message.getNamespace().equals(NAMESPACE)) {
-            if (message.getType().equals(TYPE)) {
-                callback.onNearbyMessage(DirectionMessage.fromJson(new String(message.getContent())));
-            }
+    private void onMessageFound(Message message) {
+        Log.i(TAG, "Found nearby message: " + message);
+        callback.onNearbyMessageFound(message);
+    }
+
+    private void onMessageLost(Message message) {
+        Log.i(TAG, "Lost nearby message: " + message);
+        callback.onNearbyMessageLost(message);
+    }
+
+    private Message parseMessage(com.google.android.gms.nearby.messages.Message message) {
+        String body;
+        try {
+            body = new String(message.getContent());
+        } catch (Exception e) {
+            body = Arrays.toString(message.getContent());
+        }
+        if (message.getNamespace().equals(NAMESPACE) && message.getType().equals(TYPE)) {
+            return DirectionMessage.fromJson(body);
+        } else {
+            return new UnknownMessage(message.getNamespace(), message.getType(), body);
         }
     }
 
     public interface Callback {
-        void onNearbyMessage(DirectionMessage message);
+        void onNearbyMessageFound(Message message);
+
+        void onNearbyMessageLost(Message message);
     }
 
     private class GoogleApiCallbacks implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {

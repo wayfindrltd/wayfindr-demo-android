@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DirectionMessage {
+public class DirectionMessage implements Message {
     @NonNull
     public final String id;
     @NonNull
@@ -34,6 +34,11 @@ public class DirectionMessage {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("DirectionMessage{id='%s', type=%s, message='%s', nextId='%s'}", id, type, message, nextId);
     }
 
     public enum Type {
