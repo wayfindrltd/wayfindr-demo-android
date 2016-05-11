@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wayfindr Demo</string>
+    <string name="debug_app_name">Wayfindr Demo debug</string>
 </resources>
