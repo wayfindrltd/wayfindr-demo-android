@@ -13,6 +13,9 @@ import net.wayfindr.demo.controller.TextToSpeechController;
 import net.wayfindr.demo.model.DirectionMessage;
 import net.wayfindr.demo.model.Message;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION = 0;
     private TextToSpeechController textToSpeechController;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private DirectionsController directionsController;
     private TextView messageTextView;
     private TextView waitingForIdTextView;
+    private TextView currentMessagesTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +45,26 @@ public class MainActivity extends AppCompatActivity {
 
         nearbyMessagesController = new NearbyMessagesController(this, REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION, savedInstanceState, new NearbyMessagesController.Callback() {
             @Override
-            public void onNearbyMessageFound(Message message) {
-                directionsController.considerMessage(message);
+            public void onNearbyMessagesReset() {
+                updateCurrentMessages(new HashSet<Message>());
             }
 
             @Override
-            public void onNearbyMessageLost(Message message) {
+            public void onNearbyMessageFound(Message message, Set<Message> currentMessages) {
+                directionsController.considerMessage(message);
+                updateCurrentMessages(currentMessages);
+            }
+
+            @Override
+            public void onNearbyMessageLost(Message message, Set<Message> currentMessages) {
+                updateCurrentMessages(currentMessages);
             }
         });
 
         messageTextView = (TextView) findViewById(R.id.message);
         waitingForIdTextView = (TextView) findViewById(R.id.waitingForId);
         waitingForIdTextView.setText(directionsController.getWaitingForId());
+        currentMessagesTextView = (TextView) findViewById(R.id.currentMessages);
 
         findViewById(R.id.speakGeneral).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +96,19 @@ public class MainActivity extends AppCompatActivity {
                 directionsController.considerMessage(new DirectionMessage("3", DirectionMessage.Type.FINISH, "You made it", null));
             }
         });
+    }
+
+    private void updateCurrentMessages(Set<Message> currentMessages) {
+        if (currentMessages.isEmpty()) {
+            currentMessagesTextView.setText("<None>");
+        } else {
+            String text = "";
+            for (Message message : currentMessages) {
+                if (!text.isEmpty()) text += "\n";
+                text += message;
+            }
+            currentMessagesTextView.setText(text);
+        }
     }
 
     @Override

@@ -41,6 +41,26 @@ public class DirectionMessage implements Message {
         return String.format("DirectionMessage{id='%s', type=%s, message='%s', nextId='%s'}", id, type, message, nextId);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DirectionMessage that = (DirectionMessage) o;
+        return id.equals(that.id) && type == that.type &&
+                message.equals(that.message) &&
+                (nextId != null ? nextId.equals(that.nextId) : that.nextId == null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + type.hashCode();
+        result = 31 * result + message.hashCode();
+        result = 31 * result + (nextId != null ? nextId.hashCode() : 0);
+        return result;
+    }
+
     public enum Type {
         START,
         NODE,

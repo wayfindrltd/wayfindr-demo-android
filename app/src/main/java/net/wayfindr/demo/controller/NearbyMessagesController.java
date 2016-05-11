@@ -22,6 +22,8 @@ import net.wayfindr.demo.model.Message;
 import net.wayfindr.demo.model.UnknownMessage;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NearbyMessagesController {
     private final static String TAG = NearbyMessagesController.class.getSimpleName();
@@ -33,6 +35,7 @@ public class NearbyMessagesController {
     private final Callback callback;
     private final GoogleApiClient googleApiClient;
     private boolean resolvingError;
+    private final Set<Message> currentMessages = new HashSet<>();
 
     public NearbyMessagesController(Activity activity, int requestNearbyMessagesResolution, @Nullable Bundle savedInstanceState, Callback callback) {
         this.activity = activity;
@@ -57,11 +60,14 @@ public class NearbyMessagesController {
     }
 
     private void subscribe() {
+        currentMessages.clear();
+        callback.onNearbyMessagesReset();
+
         SubscribeOptions options = new SubscribeOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
                 .build();
 
-        Nearby.Messages.subscribe(googleApiClient, new MessageListener() {
+        MessageListener messageListener = new MessageListener() {
             @Override
             public void onFound(com.google.android.gms.nearby.messages.Message message) {
                 onMessageFound(parseMessage(message));
@@ -71,7 +77,9 @@ public class NearbyMessagesController {
             public void onLost(com.google.android.gms.nearby.messages.Message message) {
                 onMessageLost(parseMessage(message));
             }
-        }, options)
+        };
+
+        Nearby.Messages.subscribe(googleApiClient, messageListener, options)
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
@@ -112,12 +120,20 @@ public class NearbyMessagesController {
 
     private void onMessageFound(Message message) {
         Log.i(TAG, "Found nearby message: " + message);
-        callback.onNearbyMessageFound(message);
+        if (currentMessages.add(message)) {
+            callback.onNearbyMessageFound(message, currentMessages);
+        } else {
+            Log.w(TAG, "Message is already in the current set, ignore");
+        }
     }
 
     private void onMessageLost(Message message) {
         Log.i(TAG, "Lost nearby message: " + message);
-        callback.onNearbyMessageLost(message);
+        if (currentMessages.remove(message)) {
+            callback.onNearbyMessageLost(message, currentMessages);
+        } else {
+            Log.w(TAG, "Message wasn't in the current set, ignore");
+        }
     }
 
     private Message parseMessage(com.google.android.gms.nearby.messages.Message message) {
@@ -135,9 +151,12 @@ public class NearbyMessagesController {
     }
 
     public interface Callback {
-        void onNearbyMessageFound(Message message);
+        void onNearbyMessagesReset();
 
-        void onNearbyMessageLost(Message message);
+        void onNearbyMessageFound(Message message, Set<Message> currentMessages);
+
+        void onNearbyMessageLost(Message message, Set<Message> currentMessages);
+
     }
 
     private class GoogleApiCallbacks implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
