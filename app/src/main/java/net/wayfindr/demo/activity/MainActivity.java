@@ -32,8 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
         textToSpeechController = new TextToSpeechController(this, new TextToSpeechController.Callback() {
             @Override
-            public void onTextChanged(String text) {
+            public void onUtteranceStart(String text) {
                 messageTextView.setText(text);
+            }
+
+            @Override
+            public void onUtteranceDone(String text) {
+                directionsController.onTextToSpeechDone();
             }
         });
         directionsController = new DirectionsController(textToSpeechController, savedInstanceState, new DirectionsController.Callback() {
@@ -51,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNearbyMessageFound(Message message, Set<Message> currentMessages) {
-                directionsController.considerMessage(message);
                 updateCurrentMessages(currentMessages);
             }
 
@@ -81,24 +85,26 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.visitMessage1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                directionsController.considerMessage(new DirectionMessage("1", DirectionMessage.Type.START, "Welcome to 1. Proceed to 2", "2"));
+//                directionsController.onMessageFound(new DirectionMessage("1", DirectionMessage.Type.START, "Welcome to 1. Proceed to 2", "2"), currentMessages);
             }
         });
         findViewById(R.id.visitMessage2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                directionsController.considerMessage(new DirectionMessage("2", DirectionMessage.Type.NODE, "Proceed to 3", "3"));
+//                directionsController.onMessageFound(new DirectionMessage("2", DirectionMessage.Type.NODE, "Proceed to 3", "3"), currentMessages);
             }
         });
         findViewById(R.id.visitMessage3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                directionsController.considerMessage(new DirectionMessage("3", DirectionMessage.Type.FINISH, "You made it", null));
+//                directionsController.onMessageFound(new DirectionMessage("3", DirectionMessage.Type.FINISH, "You made it", null), currentMessages);
             }
         });
     }
 
     private void updateCurrentMessages(Set<Message> currentMessages) {
+        directionsController.setCurrentMessages(currentMessages);
+
         if (currentMessages.isEmpty()) {
             currentMessagesTextView.setText("<None>");
         } else {

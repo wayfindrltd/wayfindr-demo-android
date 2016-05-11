@@ -53,17 +53,20 @@
         android:id="@+id/visitMessage1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visit message 1" />
+        android:text="Visit message 1"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/visitMessage2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visit message 2" />
+        android:text="Visit message 2"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/visitMessage3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visit message 3" />
+        android:text="Visit message 3"
+        android:visibility="gone" />
 </LinearLayout>

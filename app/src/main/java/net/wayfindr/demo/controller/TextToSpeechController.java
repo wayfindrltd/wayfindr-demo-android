@@ -27,13 +27,19 @@ public class TextToSpeechController {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                callback.onTextChanged(utteranceId);
+                                callback.onUtteranceStart(utteranceId);
                             }
                         });
                     }
 
                     @Override
-                    public void onDone(String utteranceId) {
+                    public void onDone(final String utteranceId) {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onUtteranceDone(utteranceId);
+                            }
+                        });
                     }
 
                     @Override
@@ -65,8 +71,14 @@ public class TextToSpeechController {
         }
     }
 
+    public boolean isSpeaking() {
+        return textToSpeech.isSpeaking();
+    }
+
     public interface Callback {
-        void onTextChanged(String text);
+        void onUtteranceStart(String text);
+
+        void onUtteranceDone(String text);
     }
 
     public enum Earcon {
