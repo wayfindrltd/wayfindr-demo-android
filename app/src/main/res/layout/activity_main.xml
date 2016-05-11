@@ -49,24 +49,21 @@
         android:layout_height="wrap_content"
         android:text="Speak journey complete" />
 
-    <Button
+    <Switch
         android:id="@+id/visitMessage1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visit message 1"
-        android:visibility="gone" />
+        android:text="Visit message 1" />
 
-    <Button
+    <Switch
         android:id="@+id/visitMessage2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visit message 2"
-        android:visibility="gone" />
+        android:text="Visit message 2" />
 
-    <Button
+    <Switch
         android:id="@+id/visitMessage3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visit message 3"
-        android:visibility="gone" />
+        android:text="Visit message 3" />
 </LinearLayout>

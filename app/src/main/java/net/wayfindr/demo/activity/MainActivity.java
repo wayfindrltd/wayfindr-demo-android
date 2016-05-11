@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import net.wayfindr.demo.R;
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView messageTextView;
     private TextView waitingForIdTextView;
     private TextView currentMessagesTextView;
+    private Switch visitMessage1Switch;
+    private Switch visitMessage2Switch;
+    private Switch visitMessage3Switch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
         waitingForIdTextView = (TextView) findViewById(R.id.waitingForId);
         waitingForIdTextView.setText(directionsController.getWaitingForId());
         currentMessagesTextView = (TextView) findViewById(R.id.currentMessages);
+        visitMessage1Switch = (Switch) findViewById(R.id.visitMessage1);
+        visitMessage2Switch = (Switch) findViewById(R.id.visitMessage2);
+        visitMessage3Switch = (Switch) findViewById(R.id.visitMessage3);
+
 
         findViewById(R.id.speakGeneral).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,34 +91,37 @@ public class MainActivity extends AppCompatActivity {
                 textToSpeechController.speak(TextToSpeechController.Earcon.JOURNEY_COMPLETE, "Journey is complete");
             }
         });
-        findViewById(R.id.visitMessage1).setOnClickListener(new View.OnClickListener() {
+
+        CompoundButton.OnCheckedChangeListener messageSwitchesListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-//                directionsController.onMessageFound(new DirectionMessage("1", DirectionMessage.Type.START, "Welcome to 1. Proceed to 2", "2"), currentMessages);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                updateCurrentMessages(nearbyMessagesController.getCurrentMessages());
             }
-        });
-        findViewById(R.id.visitMessage2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                directionsController.onMessageFound(new DirectionMessage("2", DirectionMessage.Type.NODE, "Proceed to 3", "3"), currentMessages);
-            }
-        });
-        findViewById(R.id.visitMessage3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                directionsController.onMessageFound(new DirectionMessage("3", DirectionMessage.Type.FINISH, "You made it", null), currentMessages);
-            }
-        });
+        };
+        visitMessage1Switch.setOnCheckedChangeListener(messageSwitchesListener);
+        visitMessage2Switch.setOnCheckedChangeListener(messageSwitchesListener);
+        visitMessage3Switch.setOnCheckedChangeListener(messageSwitchesListener);
     }
 
     private void updateCurrentMessages(Set<Message> currentMessages) {
-        directionsController.setCurrentMessages(currentMessages);
+        HashSet<Message> messagesIncludingSwitches = new HashSet<>(currentMessages);
+        if (visitMessage1Switch.isChecked()) {
+            messagesIncludingSwitches.add(new DirectionMessage("1", DirectionMessage.Type.START, "Welcome to 1. Proceed to 2", "2"));
+        }
+        if (visitMessage2Switch.isChecked()) {
+            messagesIncludingSwitches.add(new DirectionMessage("2", DirectionMessage.Type.NODE, "Proceed to 3", "3"));
+        }
+        if (visitMessage3Switch.isChecked()) {
+            messagesIncludingSwitches.add(new DirectionMessage("3", DirectionMessage.Type.FINISH, "You made it", null));
+        }
 
-        if (currentMessages.isEmpty()) {
+        directionsController.setCurrentMessages(messagesIncludingSwitches);
+
+        if (messagesIncludingSwitches.isEmpty()) {
             currentMessagesTextView.setText("<None>");
         } else {
             String text = "";
-            for (Message message : currentMessages) {
+            for (Message message : messagesIncludingSwitches) {
                 if (!text.isEmpty()) text += "\n";
                 text += message;
             }

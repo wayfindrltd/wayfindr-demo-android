@@ -150,6 +150,10 @@ public class NearbyMessagesController {
         }
     }
 
+    public Set<Message> getCurrentMessages() {
+        return currentMessages;
+    }
+
     public interface Callback {
         void onNearbyMessagesReset();
 
