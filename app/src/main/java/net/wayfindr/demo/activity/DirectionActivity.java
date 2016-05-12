@@ -1,8 +1,12 @@
 package net.wayfindr.demo.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +28,10 @@ public class DirectionActivity extends AppCompatActivity {
     private View restartButton;
     private View loadingPanel;
     private View directionsPanel;
+
+    public static Intent createIntent(Context context) {
+        return new Intent(context, DirectionActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +136,24 @@ public class DirectionActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION) {
             nearbyMessagesController.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_direction, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.switch_to_debug:
+                startActivity(DebugActivity.createIntent(this));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

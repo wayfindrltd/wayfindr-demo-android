@@ -22,7 +22,7 @@
             android:layout_marginBottom="12dp"
             android:gravity="center_horizontal"
             android:text="@string/loading"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            android:textAppearance="@style/App.TextAppearance.BodyLarge" />
 
         <ProgressBar
             style="?android:progressBarStyleLarge"
@@ -50,7 +50,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAppearance="@style/App.TextAppearance.BodyLarge"
             tools:text="Welcome to the Wayfindr demo" />
 
         <Button
