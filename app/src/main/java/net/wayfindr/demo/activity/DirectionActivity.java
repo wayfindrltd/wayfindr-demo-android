@@ -22,6 +22,8 @@ public class DirectionActivity extends AppCompatActivity {
     private DirectionsController directionsController;
     private TextView messageTextView;
     private View restartButton;
+    private View loadingPanel;
+    private View directionsPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class DirectionActivity extends AppCompatActivity {
         directionsController = new DirectionsController(textToSpeechController, savedInstanceState, new DirectionsController.Callback() {
             @Override
             public void onWaitingForIdChanged(String id) {
+                updateUiVisibility();
             }
 
             @Override
@@ -68,6 +71,8 @@ public class DirectionActivity extends AppCompatActivity {
             }
         });
 
+        directionsPanel = findViewById(R.id.directionsPanel);
+        loadingPanel = findViewById(R.id.loadingPanel);
         messageTextView = (TextView) findViewById(R.id.message);
         restartButton = findViewById(R.id.restart);
         restartButton.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +89,9 @@ public class DirectionActivity extends AppCompatActivity {
 
     private void updateUiVisibility() {
         restartButton.setVisibility(directionsController.isFinished() ? View.VISIBLE : View.GONE);
+        boolean loading = directionsController.isLookingForStartMessage();
+        loadingPanel.setVisibility(loading ? View.VISIBLE : View.GONE);
+        directionsPanel.setVisibility(loading ? View.GONE : View.VISIBLE);
     }
 
     private void updateCurrentMessages(Set<Message> currentMessages) {

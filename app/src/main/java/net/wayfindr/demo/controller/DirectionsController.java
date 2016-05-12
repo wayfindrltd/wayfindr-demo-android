@@ -91,6 +91,10 @@ public class DirectionsController {
         return currentMessage == null ? null : currentMessage.nextId;
     }
 
+    public boolean isLookingForStartMessage() {
+        return currentMessage == null && !finished;
+    }
+
     public interface Callback {
         void onWaitingForIdChanged(String id);
 
