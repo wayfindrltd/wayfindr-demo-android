@@ -18,14 +18,7 @@
         </activity>
         <activity
             android:name=".activity.DebugActivity"
-            android:label="@string/debug_app_name"
-            android:taskAffinity="${applicationId}.activity.DebugActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="@string/debug_app_name" />
 
         <meta-data
             android:name="com.google.android.gms.version"
