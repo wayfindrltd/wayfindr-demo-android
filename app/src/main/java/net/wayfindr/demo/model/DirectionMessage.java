@@ -1,12 +1,14 @@
 package net.wayfindr.demo.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DirectionMessage implements Message {
+public class DirectionMessage implements Message, Parcelable {
     @NonNull
     public final String id;
     @NonNull
@@ -16,11 +18,43 @@ public class DirectionMessage implements Message {
     @Nullable
     public final String nextId;
 
+    public static final Creator<DirectionMessage> CREATOR = new Creator<DirectionMessage>() {
+        @Override
+        public DirectionMessage createFromParcel(Parcel in) {
+            return new DirectionMessage(in);
+        }
+
+        @Override
+        public DirectionMessage[] newArray(int size) {
+            return new DirectionMessage[size];
+        }
+    };
+
     public DirectionMessage(@NonNull String id, @NonNull Type type, @NonNull String message, @Nullable String nextId) {
         this.id = id;
         this.type = type;
         this.message = message;
         this.nextId = nextId;
+    }
+
+    protected DirectionMessage(Parcel in) {
+        id = in.readString();
+        type = Type.values()[in.readInt()];
+        message = in.readString();
+        nextId = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeInt(type.ordinal());
+        dest.writeString(message);
+        dest.writeString(nextId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static DirectionMessage fromJson(String body) {

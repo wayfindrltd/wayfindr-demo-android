@@ -3,6 +3,7 @@ package net.wayfindr.demo.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import net.wayfindr.demo.R;
@@ -20,6 +21,7 @@ public class DirectionActivity extends AppCompatActivity {
     private NearbyMessagesController nearbyMessagesController;
     private DirectionsController directionsController;
     private TextView messageTextView;
+    private View restartButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,11 @@ public class DirectionActivity extends AppCompatActivity {
             @Override
             public void onWaitingForIdChanged(String id) {
             }
+
+            @Override
+            public void onJourneyFinished() {
+                updateUiVisibility();
+            }
         });
 
         nearbyMessagesController = new NearbyMessagesController(this, REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION, savedInstanceState, new NearbyMessagesController.Callback() {
@@ -62,6 +69,21 @@ public class DirectionActivity extends AppCompatActivity {
         });
 
         messageTextView = (TextView) findViewById(R.id.message);
+        restartButton = findViewById(R.id.restart);
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageTextView.setText("");
+                directionsController.restart();
+                updateUiVisibility();
+            }
+        });
+
+        updateUiVisibility();
+    }
+
+    private void updateUiVisibility() {
+        restartButton.setVisibility(directionsController.isFinished() ? View.VISIBLE : View.GONE);
     }
 
     private void updateCurrentMessages(Set<Message> currentMessages) {

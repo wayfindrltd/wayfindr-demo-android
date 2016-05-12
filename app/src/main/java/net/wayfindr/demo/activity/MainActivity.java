@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.wayfindr.demo.R;
 import net.wayfindr.demo.controller.DirectionsController;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Switch visitMessage1Switch;
     private Switch visitMessage2Switch;
     private Switch visitMessage3Switch;
+    private View restartButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onWaitingForIdChanged(String id) {
                 waitingForIdTextView.setText(id == null ? "" : id);
+            }
+
+            @Override
+            public void onJourneyFinished() {
+                Toast.makeText(MainActivity.this, "Journey finished", Toast.LENGTH_SHORT).show();
+                updateUiVisibility();
             }
         });
 
@@ -77,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         visitMessage1Switch = (Switch) findViewById(R.id.visitMessage1);
         visitMessage2Switch = (Switch) findViewById(R.id.visitMessage2);
         visitMessage3Switch = (Switch) findViewById(R.id.visitMessage3);
-
+        restartButton = findViewById(R.id.restart);
 
         findViewById(R.id.speakGeneral).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restart();
+            }
+        });
+
         CompoundButton.OnCheckedChangeListener messageSwitchesListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -101,6 +116,18 @@ public class MainActivity extends AppCompatActivity {
         visitMessage1Switch.setOnCheckedChangeListener(messageSwitchesListener);
         visitMessage2Switch.setOnCheckedChangeListener(messageSwitchesListener);
         visitMessage3Switch.setOnCheckedChangeListener(messageSwitchesListener);
+
+        updateUiVisibility();
+    }
+
+    private void restart() {
+        messageTextView.setText("");
+        directionsController.restart();
+        updateUiVisibility();
+    }
+
+    private void updateUiVisibility() {
+        restartButton.setVisibility(directionsController.isFinished() ? View.VISIBLE : View.GONE);
     }
 
     private void updateCurrentMessages(Set<Message> currentMessages) {
