@@ -17,9 +17,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.DebugActivity"
             android:label="@string/debug_app_name"
-            android:taskAffinity="${applicationId}.activity.MainActivity">
+            android:taskAffinity="${applicationId}.activity.DebugActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

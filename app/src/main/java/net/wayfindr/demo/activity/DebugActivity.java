@@ -19,7 +19,7 @@ import net.wayfindr.demo.model.Message;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class DebugActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_NEARBY_MESSAGES_RESOLUTION = 0;
     private TextToSpeechController textToSpeechController;
     private NearbyMessagesController nearbyMessagesController;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_debug);
 
         textToSpeechController = new TextToSpeechController(this, new TextToSpeechController.Callback() {
             @Override
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onJourneyFinished() {
-                Toast.makeText(MainActivity.this, "Journey finished", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DebugActivity.this, "Journey finished", Toast.LENGTH_SHORT).show();
                 updateUiVisibility();
             }
         });
