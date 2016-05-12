@@ -3,16 +3,12 @@ package net.wayfindr.demo.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import net.wayfindr.demo.R;
 import net.wayfindr.demo.controller.DirectionsController;
 import net.wayfindr.demo.controller.NearbyMessagesController;
 import net.wayfindr.demo.controller.TextToSpeechController;
-import net.wayfindr.demo.model.DirectionMessage;
 import net.wayfindr.demo.model.Message;
 
 import java.util.HashSet;
@@ -29,6 +25,7 @@ public class DirectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
+        setTitle(getString(R.string.direction_title));
 
         textToSpeechController = new TextToSpeechController(this, new TextToSpeechController.Callback() {
             @Override
