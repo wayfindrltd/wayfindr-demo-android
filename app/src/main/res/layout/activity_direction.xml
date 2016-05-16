@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -81,7 +81,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Waiting for id:"
+                android:text="@string/debug_waiting_for_id_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <TextView
@@ -93,7 +93,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Current messages:"
+                android:text="@string/debug_current_messages_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <TextView
@@ -105,27 +105,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fake beacons:"
+                android:text="@string/debug_fake_beacons_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <Switch
                 android:id="@+id/visitMessage1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Visit message 1" />
+                android:text="@string/debug_visit_message_1" />
 
             <Switch
                 android:id="@+id/visitMessage2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Visit message 2" />
+                android:text="@string/debug_visit_message_2" />
 
             <Switch
                 android:id="@+id/visitMessage3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
-                android:text="Visit message 3" />
+                android:text="@string/debug_visit_message_3" />
         </LinearLayout>
     </ScrollView>
-</FrameLayout>
+</merge>

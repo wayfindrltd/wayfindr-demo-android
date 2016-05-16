@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Wayfindr Demo</string>
+    <string name="debug_current_messages_empty"><![CDATA[<None>]]></string>
+    <string name="debug_current_messages_label">Current messages:</string>
+    <string name="debug_fake_beacons_label">Fake beacons:</string>
+    <string name="debug_visit_message_1">Visit message 1</string>
+    <string name="debug_visit_message_2">Visit message 2</string>
+    <string name="debug_visit_message_3">Visit message 3</string>
+    <string name="debug_waiting_for_id_label">Waiting for id:</string>
     <string name="direction_title">Wayfindr</string>
     <string name="loading">Awaiting beacons…</string>
     <string name="restart">Restart</string>

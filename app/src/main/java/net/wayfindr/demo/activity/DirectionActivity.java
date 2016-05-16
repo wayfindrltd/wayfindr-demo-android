@@ -143,7 +143,7 @@ public class DirectionActivity extends AppCompatActivity {
         directionsController.setCurrentMessages(messagesIncludingSwitches);
 
         if (messagesIncludingSwitches.isEmpty()) {
-            currentMessagesTextView.setText("<None>");
+            currentMessagesTextView.setText(R.string.debug_current_messages_empty);
         } else {
             String text = "";
             for (Message message : messagesIncludingSwitches) {
