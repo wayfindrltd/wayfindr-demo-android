@@ -1,6 +1,5 @@
 package net.wayfindr.demo.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -37,10 +36,6 @@ public class DirectionActivity extends AppCompatActivity {
     private View loadingPanel;
     private View directionsPanel;
     private View debugPanel;
-
-    public static Intent createIntent(Context context) {
-        return new Intent(context, DirectionActivity.class);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
