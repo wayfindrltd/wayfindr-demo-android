@@ -83,7 +83,9 @@ public class NearbyMessagesController {
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        if (!status.isSuccess()) {
+                        if (status.isSuccess()) {
+                            Log.i(TAG, "Subscribed to nearby messages");
+                        } else {
                             onNearbySubscriptionFailure(status);
                         }
                     }
