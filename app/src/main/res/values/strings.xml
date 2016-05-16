@@ -4,4 +4,5 @@
     <string name="direction_title">Wayfindr</string>
     <string name="loading">Awaiting beacons…</string>
     <string name="restart">Restart</string>
+    <string name="show_debug">Show debug</string>
 </resources>

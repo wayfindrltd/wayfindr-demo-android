@@ -2,5 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/switch_to_debug"
-        android:title="Go to debug" />
+        android:checkable="true"
+        android:title="@string/show_debug" />
 </menu>
